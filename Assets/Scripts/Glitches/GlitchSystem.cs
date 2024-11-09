@@ -7,7 +7,7 @@ public class GlitchSystem : MonoBehaviour
 {
     // внешние глитчи
     [SerializeField] private float _startIntervalVisual = 5f;
-    [SerializeField] private float _endIntervalVisual = 1f;
+    //[SerializeField] private float _endIntervalVisual = 1f;
     [SerializeField] private List<VisualGlitch> _visualGlitches = new List<VisualGlitch>();
 
     [Space]
@@ -31,6 +31,7 @@ public class GlitchSystem : MonoBehaviour
     private int _glitchesCount = 0;
     private int _glitchVariantsCount = 1;
 
+    private float _currentIntervalVisual = 0f;
     private float _currentInterval = 0f;
     private static float _chanceToGlitch = 0.3f;
     public static float ChanceToGlitch => _chanceToGlitch;
@@ -54,11 +55,8 @@ public class GlitchSystem : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(_startIntervalVisual);
-            if (ProbabilityChecker.CheckProbability(_chanceToGlitch))
-            {
-                int randomGlitch = Random.Range(0, _visualGlitches.Count);
-                _visualGlitches[randomGlitch].StartGlitch();
-            }
+            int randomGlitch = Random.Range(0, _visualGlitches.Count);
+            _visualGlitches[randomGlitch].StartGlitch();
         }
     }
 
@@ -133,7 +131,11 @@ public class GlitchSystem : MonoBehaviour
             _chanceToGlitch += 0.1f;
 
         if (_currentInterval > _endInterval && _glitchesCount % _intervalDecreaseSpeed == 0)
+        {
             _currentInterval -= _intervalDecrease;
+            _currentIntervalVisual -= _intervalDecrease;
+            if (_digitalGlitch.intensity < 0.9f) _digitalGlitch.intensity += 0.1f;
+        }
     }
 
     public void StartDigitalGlitch()

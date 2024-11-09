@@ -22,7 +22,7 @@ public class BossMovement : MonoBehaviour
 
     public Transform PlayerTransform => _player;
 
-    private void Start()
+    private void OnEnable()
     {
         StartCoroutine(FollowAndAttack());
     }

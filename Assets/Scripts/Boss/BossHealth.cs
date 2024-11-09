@@ -11,7 +11,7 @@ public class BossHealth : MonoBehaviour
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
 
-    private void Start()
+    private void Awake()
     {
         currentHealth = maxHealth;
     }

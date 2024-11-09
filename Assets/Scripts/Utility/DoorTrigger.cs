@@ -17,6 +17,7 @@ public class DoorTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _door.SetActive(true);
+            CommonEvents.Instance.OnBattleStart?.Invoke();
             gameObject.SetActive(false);
         }
     }

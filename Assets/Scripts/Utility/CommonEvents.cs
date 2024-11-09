@@ -21,4 +21,10 @@ public class CommonEvents : MonoBehaviour
     public Action OnBossDeath;
 
     public Action OnDigitalGlitch;
+
+    // общее
+    public Action OnGameStart;
+    public Action OnBattleStart;
+    public Action OnBattleEnd;
+    public Action OnGameEnd;
 }
