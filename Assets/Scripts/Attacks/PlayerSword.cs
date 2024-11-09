@@ -17,6 +17,7 @@ public class PlayerSword : Weapon
     [Header("Glitch")]
     [SerializeField] private float _minGlitchDuration = 1f;
     [SerializeField] private float _maxGlitchDuration = 5f;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
 
     private bool _isAttacking = false;
     private bool _isGlitching = false;
@@ -102,9 +103,9 @@ public class PlayerSword : Weapon
     private IEnumerator HideSwordCoroutine()
     {
         _isGlitching = true;
-        GetComponent<SpriteRenderer>().enabled = false;
+        _spriteRenderer.enabled = false;
         yield return new WaitForSeconds(Random.Range(_minGlitchDuration, _maxGlitchDuration));
-        GetComponent<SpriteRenderer>().enabled = true;
+        _spriteRenderer.enabled = true;
         _isGlitching = false;
     }
 }

@@ -76,7 +76,7 @@ public class BossAreaAttack : BossAttack
     {
         if (ProbabilityChecker.CheckProbability(_chanceToGlitch))
         {
-            CommonEvents.Instance.OnDigitalGlitch?.Invoke();
+            CommonEvents.Instance.OnDigitalGlitch.Invoke();
             return _bossMovement.PlayerTransform.position;
         }
 

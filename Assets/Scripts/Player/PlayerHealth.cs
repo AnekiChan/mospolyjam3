@@ -19,7 +19,7 @@ public class PlayerHealth : MonoBehaviour
         {
             currentHealth -= damage;
             CommonEvents.Instance.OnPlayerChangeHealth?.Invoke(currentHealth);
-            Debug.Log("Player took damage. Current health: " + currentHealth);
+            //Debug.Log("Player took damage. Current health: " + currentHealth);
 
             if (currentHealth <= 0)
             {
@@ -34,7 +34,7 @@ public class PlayerHealth : MonoBehaviour
         {
             currentHealth++;
             CommonEvents.Instance.OnPlayerChangeHealth?.Invoke(currentHealth);
-            Debug.Log("Player healed. Current health: " + currentHealth);
+            //Debug.Log("Player healed. Current health: " + currentHealth);
         }
     }
 

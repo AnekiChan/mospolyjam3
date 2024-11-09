@@ -36,7 +36,12 @@ public class GlitchSystem : MonoBehaviour
     private static float _chanceToGlitch = 0.3f;
     public static float ChanceToGlitch => _chanceToGlitch;
 
-    void Start()
+    void Awake()
+    {
+
+    }
+
+    void OnEnable()
     {
         _currentInterval = _startInterval;
         StartCoroutine(VisualGlitch());
@@ -55,6 +60,8 @@ public class GlitchSystem : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(_startIntervalVisual);
+            Debug.Log("Visual glitch");
+
             int randomGlitch = Random.Range(0, _visualGlitches.Count);
             _visualGlitches[randomGlitch].StartGlitch();
         }

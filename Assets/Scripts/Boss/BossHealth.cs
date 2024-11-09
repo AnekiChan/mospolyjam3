@@ -22,7 +22,7 @@ public class BossHealth : MonoBehaviour
         {
             currentHealth -= damage;
             CommonEvents.Instance.OnBossChangeHealth?.Invoke(currentHealth);
-            Debug.Log("Boss took damage. Current health: " + currentHealth);
+            //Debug.Log("Boss took damage. Current health: " + currentHealth);
 
             if (currentHealth <= 0)
             {
@@ -37,7 +37,7 @@ public class BossHealth : MonoBehaviour
         {
             currentHealth = (currentHealth + heal) % maxHealth;
             CommonEvents.Instance.OnBossChangeHealth?.Invoke(currentHealth);
-            Debug.Log("Boss healed. Current health: " + currentHealth);
+            //Debug.Log("Boss healed. Current health: " + currentHealth);
         }
     }
 

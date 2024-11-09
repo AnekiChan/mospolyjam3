@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 726396981436811513}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 40484786004811150}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1647661018718620181
 MonoBehaviour:
@@ -72,14 +72,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5239962672517296740}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.70041114, w: 0.71373963}
   m_LocalPosition: {x: 0, y: -0.0751, z: 0}
   m_LocalScale: {x: 0.3992, y: 1.1502, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8946451395614607285}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -88.92}
 --- !u!212 &9002184928314790548
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -156,7 +156,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7880839971707988364}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.02, y: 1.45, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -164,6 +163,7 @@ Transform:
   m_Children:
   - {fileID: 3943971626955863541}
   m_Father: {fileID: 40484786004811150}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1540906848420034408
 MonoBehaviour:
@@ -185,6 +185,7 @@ MonoBehaviour:
   checkRadius: 1
   _minGlitchDuration: 1
   _maxGlitchDuration: 5
+  _spriteRenderer: {fileID: 9002184928314790548}
 --- !u!1 &8806409676468545069
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,7 +214,6 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8806409676468545069}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.05, y: -4.24, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -222,6 +222,7 @@ Transform:
   - {fileID: 8946451395614607285}
   - {fileID: 4189974263762507519}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &563490097167318171
 SpriteRenderer:
@@ -292,12 +293,6 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -312,25 +307,6 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -354,6 +330,7 @@ MonoBehaviour:
   dodgeCooldown: 1
   _playerSword: {fileID: 1540906848420034408}
   _movingGlitchDuration: 2
+  _teleportArea: {x: 10, y: 10}
 --- !u!114 &732521221134612933
 MonoBehaviour:
   m_ObjectHideFlags: 0
