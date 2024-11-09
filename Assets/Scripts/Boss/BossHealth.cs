@@ -31,11 +31,11 @@ public class BossHealth : MonoBehaviour
         }
     }
 
-    public void Heal()
+    public void Heal(int heal)
     {
         if (currentHealth < maxHealth)
         {
-            currentHealth++;
+            currentHealth = (currentHealth + heal) % maxHealth;
             CommonEvents.Instance.OnBossChangeHealth?.Invoke(currentHealth);
             Debug.Log("Boss healed. Current health: " + currentHealth);
         }

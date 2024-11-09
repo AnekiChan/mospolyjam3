@@ -13,13 +13,14 @@ public class BossAreaAttack : BossAttack
 
     [Space]
     [Header("Glitch")]
-    [SerializeField] private float _chanceToGlitch = 1f;
+    //[SerializeField] private float _chanceToGlitch = 1f;
     private float _glitchStartTimer = 0f;
     [SerializeField] private BossMovement _bossMovement;
 
     private int spikesSpawned = 0;
     private bool _isSpawning = false;
     private float _timer = 0f;
+    private bool _isGlitchWasActive = false;
 
     public override bool IsMovingWhileAttacking => _isMovingWhileAttacking;
 
@@ -28,6 +29,8 @@ public class BossAreaAttack : BossAttack
         _timer = 0;
         spikesSpawned = 0;
         _isSpawning = true;
+        _isGlitchWasActive = false;
+
         StartCoroutine(SpawnSpikes());
     }
 
@@ -39,7 +42,7 @@ public class BossAreaAttack : BossAttack
     private IEnumerator SpawnSpikes()
     {
         _glitchStartTimer = spawnInterval * maxSpikes;
-        if (ProbabilityChecker.CheckProbability(_chanceToGlitch))
+        if (ProbabilityChecker.CheckProbability(0.5f))
         {
             _glitchStartTimer = Random.Range(0.5f, spawnInterval * maxSpikes / 2);
             Debug.Log("Area Attack Glitching");
@@ -49,7 +52,15 @@ public class BossAreaAttack : BossAttack
         {
             Vector3 spawnPosition;
             if (_timer > _glitchStartTimer)
+            {
+                if (!_isGlitchWasActive)
+                {
+                    CommonEvents.Instance.OnDigitalGlitch?.Invoke();
+                    _isGlitchWasActive = true;
+                }
+
                 spawnPosition = _bossMovement.PlayerTransform.position;
+            }
             else
                 spawnPosition = GetRandomPositionInArea();
 
@@ -66,7 +77,7 @@ public class BossAreaAttack : BossAttack
     {
         float xPos = Random.Range(-spawnAreaSize.x / 2f, spawnAreaSize.x / 2f);
         float yPos = Random.Range(-spawnAreaSize.y / 2f, spawnAreaSize.y / 2f);
-        return transform.position + new Vector3(xPos, yPos, 0f);
+        return new Vector3(xPos, yPos, 0f);
     }
 
     private void OnDrawGizmosSelected()

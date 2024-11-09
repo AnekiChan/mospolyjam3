@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     [Header("Glitch")]
     [SerializeField] private PlayerSword _playerSword;
     [SerializeField] private float _movingGlitchDuration = 3f;
+    [SerializeField] private Vector2 _teleportArea = new Vector2(10f, 10f);
 
     private Vector2 movement;
     private Vector2 lastMovementDirection;
@@ -63,5 +64,11 @@ public class PlayerController : MonoBehaviour
         _isMoving = false;
         yield return new WaitForSeconds(_movingGlitchDuration);
         _isMoving = true;
+    }
+
+    public void RandomTeleportGlitch()
+    {
+        Vector3 randomPosition = new Vector3(Random.Range(-(_teleportArea.x / 2), _teleportArea.x / 2), Random.Range(-(_teleportArea.y / 2), _teleportArea.y / 2), 0f);
+        transform.position = randomPosition;
     }
 }

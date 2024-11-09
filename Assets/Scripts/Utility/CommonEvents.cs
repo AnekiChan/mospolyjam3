@@ -19,4 +19,6 @@ public class CommonEvents : MonoBehaviour
 
     public Action<int> OnBossChangeHealth;
     public Action OnBossDeath;
+
+    public Action OnDigitalGlitch;
 }

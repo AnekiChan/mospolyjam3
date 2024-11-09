@@ -14,19 +14,39 @@ public class GlitchSystem : MonoBehaviour
     // глитчи босса/игрока
     [SerializeField] private float _startInterval = 5f;
     [SerializeField] private float _endInterval = 1f;
+    [SerializeField] private float _intervalDecrease = 0.1f;
+    [SerializeField] private int _intervalDecreaseSpeed = 5;
+    [SerializeField] private int _chanceToGlitchIncreaseSpeed = 3;
+
+    [Space]
     [SerializeField] private DigitalGlitch _digitalGlitch;
     [SerializeField] private float _digitalGlitchDuration = 1f;
 
-    private int _glitchesCount = 0;
-
     [Space]
     [SerializeField] private BossMovement _bossMovement;
+    [SerializeField] private BossHealth _bossHealth;
     [SerializeField] private PlayerController _playerController;
+
+
+    private int _glitchesCount = 0;
+    private int _glitchVariantsCount = 1;
+
+    private float _currentInterval = 0f;
+    private static float _chanceToGlitch = 0.3f;
+    public static float ChanceToGlitch => _chanceToGlitch;
 
     void Start()
     {
+        _currentInterval = _startInterval;
         StartCoroutine(VisualGlitch());
         StartCoroutine(BossAndPlayerGlitch());
+
+        CommonEvents.Instance.OnDigitalGlitch += StartDigitalGlitch;
+    }
+
+    void OnDisable()
+    {
+        CommonEvents.Instance.OnDigitalGlitch -= StartDigitalGlitch;
     }
 
     private IEnumerator VisualGlitch()
@@ -34,8 +54,11 @@ public class GlitchSystem : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(_startIntervalVisual);
-            int randomGlitch = Random.Range(0, _visualGlitches.Count);
-            _visualGlitches[randomGlitch].StartGlitch();
+            if (ProbabilityChecker.CheckProbability(_chanceToGlitch))
+            {
+                int randomGlitch = Random.Range(0, _visualGlitches.Count);
+                _visualGlitches[randomGlitch].StartGlitch();
+            }
         }
     }
 
@@ -45,14 +68,15 @@ public class GlitchSystem : MonoBehaviour
         {
             yield return new WaitForSeconds(_startInterval);
             ActiveBossOrPlayerGlitch();
-            StartCoroutine(DigitalGlitch());
+            StartDigitalGlitch();
             _glitchesCount++;
+            CheackBossAndPlayerGlitchVariants();
         }
     }
 
     private void ActiveBossOrPlayerGlitch()
     {
-        switch (Random.Range(0, 3))
+        switch (Random.Range(0, _glitchVariantsCount))
         {
             case 0:
                 {
@@ -74,20 +98,47 @@ public class GlitchSystem : MonoBehaviour
                 break;
             case 3:
                 {
-
+                    Debug.Log("Player teleport glitch");
+                    _playerController.RandomTeleportGlitch();
                 }
                 break;
             case 4:
                 {
-
-                }
-                break;
-            case 5:
-                {
-
+                    Debug.Log("Boss heal glitch");
+                    _bossHealth.Heal(Random.Range(5, 50));
                 }
                 break;
         }
+    }
+
+    private void CheackBossAndPlayerGlitchVariants()
+    {
+        switch (_glitchesCount)
+        {
+            case 4:
+                _glitchVariantsCount = 2;
+                break;
+            case 9:
+                _glitchVariantsCount = 3;
+                break;
+            case 15:
+                _glitchVariantsCount = 4;
+                break;
+            case 22:
+                _glitchVariantsCount = 5;
+                break;
+        }
+
+        if (_chanceToGlitch < 1 && _glitchesCount % _chanceToGlitchIncreaseSpeed == 0)
+            _chanceToGlitch += 0.1f;
+
+        if (_currentInterval > _endInterval && _glitchesCount % _intervalDecreaseSpeed == 0)
+            _currentInterval -= _intervalDecrease;
+    }
+
+    public void StartDigitalGlitch()
+    {
+        StartCoroutine(DigitalGlitch());
     }
 
     private IEnumerator DigitalGlitch()
