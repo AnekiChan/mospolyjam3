@@ -37,10 +37,32 @@ public class BossBulletSpawner : BossAttack
         _isSpawning = true;
         _isGlitchWasActive = false;
 
-        StartCoroutine(Spawning());
+        switch (Random.Range(0, 3))
+        {
+            case 0:
+                {
+                    StartCoroutine(Spawning(0));
+                }
+                break;
+            case 1:
+                {
+                    StartCoroutine(Spawning(0));
+                    StartCoroutine(Spawning(180));
+                }
+                break;
+            case 2:
+                {
+                    StartCoroutine(Spawning(0));
+                    StartCoroutine(Spawning(90));
+                    StartCoroutine(Spawning(180));
+                    StartCoroutine(Spawning(270));
+                }
+                break;
+        }
+
     }
 
-    private IEnumerator Spawning()
+    private IEnumerator Spawning(int rotationAngle)
     {
         _glitchStartTimer = _maxTimer;
         if (ProbabilityChecker.CheckProbability(0.5f))
@@ -51,31 +73,31 @@ public class BossBulletSpawner : BossAttack
 
         while (_timer < _maxTimer)
         {
-            if (!_isGlitchWasActive)
-            {
-                CommonEvents.Instance.OnDigitalGlitch?.Invoke();
-                _isGlitchWasActive = true;
-            }
-
             yield return new WaitForSeconds(_fiiringRate);
-            if (_timer < _glitchStartTimer) Fire();
+            if (_timer < _glitchStartTimer) Fire(rotationAngle);
             else FireRandom();
         }
 
         _isSpawning = false;
     }
 
-    private void Fire()
+    private void Fire(int rotationAngle)
     {
         if (_bulletPrefab)
         {
             _spawnedBullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
-            _spawnedBullet.transform.rotation = transform.rotation;
+            _spawnedBullet.transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + rotationAngle);
         }
     }
 
     private void FireRandom()
     {
+        if (!_isGlitchWasActive)
+        {
+            CommonEvents.Instance.OnDigitalGlitch?.Invoke();
+            _isGlitchWasActive = true;
+        }
+
         if (_bulletPrefab)
         {
             _spawnedBullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);

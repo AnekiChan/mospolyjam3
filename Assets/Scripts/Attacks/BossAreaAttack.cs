@@ -13,7 +13,7 @@ public class BossAreaAttack : BossAttack
 
     [Space]
     [Header("Glitch")]
-    //[SerializeField] private float _chanceToGlitch = 1f;
+    [SerializeField] private float _chanceToGlitch = 0.5f;
     private float _glitchStartTimer = 0f;
     [SerializeField] private BossMovement _bossMovement;
 
@@ -42,27 +42,26 @@ public class BossAreaAttack : BossAttack
     private IEnumerator SpawnSpikes()
     {
         _glitchStartTimer = spawnInterval * maxSpikes;
-        if (ProbabilityChecker.CheckProbability(0.5f))
-        {
-            _glitchStartTimer = Random.Range(0.5f, spawnInterval * maxSpikes / 2);
-            Debug.Log("Area Attack Glitching");
-        }
+        // if (ProbabilityChecker.CheckProbability(0.5f))
+        // {
+        //     _glitchStartTimer = Random.Range(0.5f, spawnInterval * maxSpikes / 2);
+        //     Debug.Log("Area Attack Glitching");
+        // }
 
         while (spikesSpawned < maxSpikes)
         {
             Vector3 spawnPosition;
-            if (_timer > _glitchStartTimer)
-            {
-                if (!_isGlitchWasActive)
-                {
-                    CommonEvents.Instance.OnDigitalGlitch?.Invoke();
-                    _isGlitchWasActive = true;
-                }
+            // if (_timer > _glitchStartTimer)
+            // {
+            //     if (!_isGlitchWasActive)
+            //     {
+            //         CommonEvents.Instance.OnDigitalGlitch?.Invoke();
+            //         _isGlitchWasActive = true;
+            //     }
 
-                spawnPosition = _bossMovement.PlayerTransform.position;
-            }
-            else
-                spawnPosition = GetRandomPositionInArea();
+            //     spawnPosition = _bossMovement.PlayerTransform.position;
+            // }
+            spawnPosition = GetRandomPositionInArea();
 
             Instantiate(_zonePrefab, spawnPosition, Quaternion.identity);
             spikesSpawned++;
@@ -75,6 +74,12 @@ public class BossAreaAttack : BossAttack
 
     private Vector3 GetRandomPositionInArea()
     {
+        if (ProbabilityChecker.CheckProbability(_chanceToGlitch))
+        {
+            CommonEvents.Instance.OnDigitalGlitch?.Invoke();
+            return _bossMovement.PlayerTransform.position;
+        }
+
         float xPos = Random.Range(-spawnAreaSize.x / 2f, spawnAreaSize.x / 2f);
         float yPos = Random.Range(-spawnAreaSize.y / 2f, spawnAreaSize.y / 2f);
         return new Vector3(xPos, yPos, 0f);

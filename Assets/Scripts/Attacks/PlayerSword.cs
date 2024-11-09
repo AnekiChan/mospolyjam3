@@ -102,7 +102,9 @@ public class PlayerSword : Weapon
     private IEnumerator HideSwordCoroutine()
     {
         _isGlitching = true;
+        GetComponent<SpriteRenderer>().enabled = false;
         yield return new WaitForSeconds(Random.Range(_minGlitchDuration, _maxGlitchDuration));
+        GetComponent<SpriteRenderer>().enabled = true;
         _isGlitching = false;
     }
 }
