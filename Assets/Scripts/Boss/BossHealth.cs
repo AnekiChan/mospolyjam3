@@ -9,6 +9,7 @@ public class BossHealth : MonoBehaviour
     private int currentHealth;
 
     public int CurrentHealth => currentHealth;
+    public int MaxHealth => maxHealth;
 
     private void Start()
     {

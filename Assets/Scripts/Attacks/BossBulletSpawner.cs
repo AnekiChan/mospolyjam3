@@ -12,6 +12,11 @@ public class BossBulletSpawner : BossAttack
     [SerializeField] private float _maxTimer = 5f;
     [SerializeField] private float _rotationSpeed = 1f;
 
+    [Space]
+    [Header("Glitch")]
+    [SerializeField] private float _chanceToGlitch = 1f;
+    private float _glitchStartTimer = 0f;
+
     private GameObject _spawnedBullet;
     private float _timer = 0;
     private bool _isSpawning = false;
@@ -35,10 +40,18 @@ public class BossBulletSpawner : BossAttack
 
     private IEnumerator Spawning()
     {
+        _glitchStartTimer = _maxTimer;
+        if (ProbabilityChecker.CheckProbability(_chanceToGlitch))
+        {
+            _glitchStartTimer = Random.Range(0.5f, _maxTimer / 2);
+            Debug.Log("Bullet Spawner Glitching");
+        }
+
         while (_timer < _maxTimer)
         {
             yield return new WaitForSeconds(_fiiringRate);
-            Fire();
+            if (_timer < _glitchStartTimer) Fire();
+            else FireRandom();
         }
 
         _isSpawning = false;
@@ -50,6 +63,15 @@ public class BossBulletSpawner : BossAttack
         {
             _spawnedBullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
             _spawnedBullet.transform.rotation = transform.rotation;
+        }
+    }
+
+    private void FireRandom()
+    {
+        if (_bulletPrefab)
+        {
+            _spawnedBullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
+            _spawnedBullet.transform.rotation = Quaternion.Euler(0, 0, Random.Range(0, 360));
         }
     }
 }

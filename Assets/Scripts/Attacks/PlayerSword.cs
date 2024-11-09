@@ -12,7 +12,14 @@ public class PlayerSword : Weapon
     [SerializeField] private float attackDuration = 0.2f;
     [SerializeField] private float swordDistanceFromPlayer = 1f;
     [SerializeField] private float checkRadius = 1f;
-    private bool isAttacking = false;
+
+    [Space]
+    [Header("Glitch")]
+    [SerializeField] private float _minGlitchDuration = 1f;
+    [SerializeField] private float _maxGlitchDuration = 5f;
+
+    private bool _isAttacking = false;
+    private bool _isGlitching = false;
 
     private Camera cam;
 
@@ -25,7 +32,7 @@ public class PlayerSword : Weapon
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        if (Input.GetMouseButtonDown(0) && !_isAttacking && !_isGlitching)
         {
             StartCoroutine(Attack());
         }
@@ -37,7 +44,7 @@ public class PlayerSword : Weapon
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = mousePosition - (Vector2)player.position;
 
-        if (!isAttacking)
+        if (!_isAttacking)
         {
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.Euler(0, 0, angle);
@@ -50,7 +57,7 @@ public class PlayerSword : Weapon
 
     private IEnumerator Attack()
     {
-        isAttacking = true;
+        _isAttacking = true;
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 attackDirection = (mousePosition - (Vector2)player.position).normalized;
 
@@ -64,7 +71,7 @@ public class PlayerSword : Weapon
         yield return new WaitForSeconds(attackDuration);
 
         sword.localPosition = originalPosition;
-        isAttacking = false;
+        _isAttacking = false;
     }
 
     private void CheackObject()
@@ -85,5 +92,17 @@ public class PlayerSword : Weapon
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, checkRadius);
+    }
+
+    public void HideSword()
+    {
+        StartCoroutine(HideSwordCoroutine());
+    }
+
+    private IEnumerator HideSwordCoroutine()
+    {
+        _isGlitching = true;
+        yield return new WaitForSeconds(Random.Range(_minGlitchDuration, _maxGlitchDuration));
+        _isGlitching = false;
     }
 }

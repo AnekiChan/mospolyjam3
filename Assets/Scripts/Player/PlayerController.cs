@@ -6,9 +6,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float dodgeDistance = 3f;
     [SerializeField] private float dodgeCooldown = 1f;
+
+    [Space]
+    [Header("Glitch")]
+    [SerializeField] private PlayerSword _playerSword;
+    [SerializeField] private float _movingGlitchDuration = 3f;
+
     private Vector2 movement;
     private Vector2 lastMovementDirection;
     private float lastDodgeTime;
+    private bool _isMoving = true;
 
     void Update()
     {
@@ -20,12 +27,12 @@ public class PlayerController : MonoBehaviour
             lastMovementDirection = movement;
 
         // Уклонение на Shift
-        if (Input.GetKeyDown(KeyCode.LeftShift) && Time.time > lastDodgeTime + dodgeCooldown)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Time.time > lastDodgeTime + dodgeCooldown && _isMoving)
         {
             Dodge();
         }
 
-        MovePlayer();
+        if (_isMoving) MovePlayer();
     }
 
     private void MovePlayer()
@@ -36,9 +43,25 @@ public class PlayerController : MonoBehaviour
 
     private void Dodge()
     {
-        Debug.Log("Dodge");
         lastDodgeTime = Time.time;
         Vector3 dodgePosition = transform.position + (Vector3)lastMovementDirection * dodgeDistance;
         transform.position = dodgePosition;
+    }
+
+    public void SwordGlitch()
+    {
+        _playerSword.HideSword();
+    }
+
+    public void MovementGlitch()
+    {
+        StartCoroutine(StopMovement());
+    }
+
+    private IEnumerator StopMovement()
+    {
+        _isMoving = false;
+        yield return new WaitForSeconds(_movingGlitchDuration);
+        _isMoving = true;
     }
 }

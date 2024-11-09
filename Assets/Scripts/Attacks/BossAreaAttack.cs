@@ -11,26 +11,55 @@ public class BossAreaAttack : BossAttack
     [SerializeField] private float spawnInterval = 1f;
     [SerializeField] private int maxSpikes = 10;
 
+    [Space]
+    [Header("Glitch")]
+    [SerializeField] private float _chanceToGlitch = 1f;
+    private float _glitchStartTimer = 0f;
+    [SerializeField] private BossMovement _bossMovement;
+
     private int spikesSpawned = 0;
+    private bool _isSpawning = false;
+    private float _timer = 0f;
 
     public override bool IsMovingWhileAttacking => _isMovingWhileAttacking;
 
     public override void StartAttack()
     {
+        _timer = 0;
+        spikesSpawned = 0;
+        _isSpawning = true;
         StartCoroutine(SpawnSpikes());
+    }
+
+    void Update()
+    {
+        if (_isSpawning) _timer += Time.deltaTime;
     }
 
     private IEnumerator SpawnSpikes()
     {
+        _glitchStartTimer = spawnInterval * maxSpikes;
+        if (ProbabilityChecker.CheckProbability(_chanceToGlitch))
+        {
+            _glitchStartTimer = Random.Range(0.5f, spawnInterval * maxSpikes / 2);
+            Debug.Log("Area Attack Glitching");
+        }
+
         while (spikesSpawned < maxSpikes)
         {
-            Vector3 spawnPosition = GetRandomPositionInArea();
-            Instantiate(_zonePrefab, spawnPosition, Quaternion.identity);
+            Vector3 spawnPosition;
+            if (_timer > _glitchStartTimer)
+                spawnPosition = _bossMovement.PlayerTransform.position;
+            else
+                spawnPosition = GetRandomPositionInArea();
 
+            Instantiate(_zonePrefab, spawnPosition, Quaternion.identity);
             spikesSpawned++;
 
             yield return new WaitForSeconds(spawnInterval);
         }
+
+        _isSpawning = false;
     }
 
     private Vector3 GetRandomPositionInArea()
