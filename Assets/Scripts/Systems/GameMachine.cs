@@ -3,6 +3,7 @@ using Kino;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameMachine : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class GameMachine : MonoBehaviour
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private GameObject _startTextPanel;
     [SerializeField] private GameObject _gameEndPanel;
+
+    [Space]
+    [SerializeField] private Image _fadeImage;
+    [SerializeField] private GameObject _loadingSlider;
+    [SerializeField] private float _fadeDuration = 2f;
+    [SerializeField] private float _fillDuration = 2f;
 
     [Space]
     [SerializeField] private GameObject _glitchSystem;
@@ -20,12 +27,20 @@ public class GameMachine : MonoBehaviour
     [Space]
     [SerializeField] private DigitalGlitch _digitalGlitch;
     [SerializeField] private AnalogGlitch _analogGlitch;
+
+    private Slider _progressSlider; // Слайдер, который будет заполняться
     void Start()
     {
+        _progressSlider = _loadingSlider.GetComponent<Slider>();
+        _loadingSlider.SetActive(false);
+
         _startTextPanel.SetActive(true);
         _startMenu.SetActive(false);
         _gameOverPanel.SetActive(false);
         _gameEndPanel.SetActive(false);
+
+        _fadeImage.color = new Color(_fadeImage.color.r, _fadeImage.color.g, _fadeImage.color.b, 0);
+        _progressSlider.value = 0;
 
         _glitchSystem.SetActive(false);
         _boss.SetActive(false);
@@ -46,8 +61,46 @@ public class GameMachine : MonoBehaviour
 
     public void StartGame()
     {
+
+        StartCoroutine(StartGameCorutine());
+    }
+
+    private IEnumerator StartGameCorutine()
+    {
+        float elapsedTime = 0f;
+        Color fadeColor = _fadeImage.color;
+        while (elapsedTime < _fadeDuration)
+        {
+            fadeColor.a = Mathf.Lerp(0, 1, elapsedTime / _fadeDuration);
+            _fadeImage.color = fadeColor;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        fadeColor.a = 1;
+        _fadeImage.color = fadeColor;
+
+        yield return new WaitForSeconds(0.2f);
+        _loadingSlider.SetActive(true);
+
+        elapsedTime = 0f;
+        while (elapsedTime < _fillDuration)
+        {
+            _progressSlider.value = Mathf.Lerp(0, 1, elapsedTime / _fillDuration);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        _progressSlider.value = 1;
         _player.SetActive(true);
         _startMenu.SetActive(false);
+
+        yield return new WaitForSeconds(0.5f);
+        _fadeImage.color = new Color(0, 0, 0, 0);
+        _loadingSlider.SetActive(false);
+
         CommonEvents.Instance.OnGameStart?.Invoke();
     }
 

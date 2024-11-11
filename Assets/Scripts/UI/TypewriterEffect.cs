@@ -4,9 +4,8 @@ using UnityEngine.UI;
 
 public class TypewriterEffect : MonoBehaviour
 {
-    private Text text;  // Ссылка на компонент TextMesh (Legacy)
-    //private string fullText;    // Полный текст, который нужно вывести
-    [SerializeField] private float delay = 0.1f; // Задержка между символами
+    private Text text;
+    [SerializeField] private float delay = 0.1f;
     [SerializeField] private float startDelay = 0f;
     [SerializeField] private string[] textArray;
     private int currentIndex = 0;
@@ -44,9 +43,9 @@ public class TypewriterEffect : MonoBehaviour
 
         for (int i = 0; i < textArray[currentIndex].Length; i++)
         {
-            currentText = textArray[currentIndex].Substring(0, i + 1);  // Постепенно берем символы от 0 до i
-            text.text = currentText;                 // Присваиваем обновленный текст компоненту TextMesh
-            yield return new WaitForSeconds(delay);       // Ждем заданное время перед следующей буквой
+            currentText = textArray[currentIndex].Substring(0, i + 1);
+            text.text = currentText;
+            yield return new WaitForSeconds(delay);
         }
 
         currentIndex++;

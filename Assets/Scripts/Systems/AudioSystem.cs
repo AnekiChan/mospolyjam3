@@ -8,10 +8,12 @@ public class AudioSystem : MonoBehaviour
     [SerializeField] private AudioClip _menuMusic;
     [SerializeField] private AudioClip _gameMusic;
     [SerializeField] private AudioClip _battleMusic;
+    [SerializeField] private AudioClip _noise;
 
     [Space]
     [SerializeField] private AudioSource _uiAudioSource;
     [SerializeField] private AudioClip _clickButtonSound;
+    [SerializeField] private AudioClip _breakSound;
 
     [Space]
     [SerializeField] private AudioSource _playerSoundSource;
@@ -34,11 +36,23 @@ public class AudioSystem : MonoBehaviour
         CommonEvents.Instance.OnBattleStart += SetBattleMusic;
         CommonEvents.Instance.OnPlayerSoundPlay += PlayPlayerSound;
         CommonEvents.Instance.OnBossSoundPlay += PlayBossSound;
+        CommonEvents.Instance.OnPlayerDeath += SetMenuMusic;
+        CommonEvents.Instance.OnBossDeath += SetMenuMusic;
+
+        CommonEvents.Instance.OnNoiseStart += SetNoise;
+        CommonEvents.Instance.OnMusicStop += StopMusic;
+        CommonEvents.Instance.OnBreakScreen += BreakSound;
     }
 
     void OnDisable()
     {
         //CommonEvents.Instance.OnGameStart -= SetGameMusic;
+    }
+
+    private void SetMenuMusic()
+    {
+        _musicSource.clip = _menuMusic;
+        _musicSource.Play();
     }
 
     private void SetGameMusic()
@@ -51,6 +65,23 @@ public class AudioSystem : MonoBehaviour
     {
         _musicSource.clip = _battleMusic;
         _musicSource.Play();
+    }
+
+    private void SetNoise()
+    {
+        _musicSource.clip = _noise;
+        _musicSource.Play();
+    }
+
+    private void StopMusic()
+    {
+        _musicSource.Stop();
+    }
+
+    private void BreakSound()
+    {
+        _uiAudioSource.clip = _breakSound;
+        _uiAudioSource.Play();
     }
 
     public void PlayButtonSound()

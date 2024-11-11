@@ -31,4 +31,8 @@ public class CommonEvents : MonoBehaviour
 
     public Action<AudioSystem.SoundType> OnPlayerSoundPlay;
     public Action<AudioSystem.SoundType> OnBossSoundPlay;
+
+    public Action OnNoiseStart;
+    public Action OnMusicStop;
+    public Action OnBreakScreen;
 }
