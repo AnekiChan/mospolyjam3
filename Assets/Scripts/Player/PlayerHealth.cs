@@ -34,6 +34,7 @@ public class PlayerHealth : MonoBehaviour
             StartCoroutine(SwitchOffCollider());
             //_damageTimer = _damageCooldown;
             _animator.SetTrigger("Hurt");
+            CommonEvents.Instance.OnPlayerSoundPlay?.Invoke(AudioSystem.SoundType.Damage);
             _damageParticles.Play();
             //Debug.Log("Player took damage. Current health: " + currentHealth);
 
@@ -66,6 +67,7 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("Player died.");
         _animator.SetTrigger("Die");
+        CommonEvents.Instance.OnPlayerSoundPlay?.Invoke(AudioSystem.SoundType.Death);
         _playerController.IsDead = true;
 
         yield return new WaitForSeconds(2f);

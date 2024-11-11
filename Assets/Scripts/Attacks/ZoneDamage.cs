@@ -35,6 +35,7 @@ public class ZoneDamage : Weapon
             if (collider.tag == "Player")
             {
                 collider.GetComponent<PlayerHealth>()?.TakeDamage(_damage);
+                CommonEvents.Instance.OnBossSoundPlay?.Invoke(AudioSystem.SoundType.Explosion);
                 return;
             }
         }

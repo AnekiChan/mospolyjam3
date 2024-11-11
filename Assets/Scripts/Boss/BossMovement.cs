@@ -101,6 +101,7 @@ public class BossMovement : MonoBehaviour
     private IEnumerator MeleeAttack(PlayerHealth playerHealth)
     {
         _animator.SetTrigger("Attack");
+        CommonEvents.Instance.OnBossSoundPlay?.Invoke(AudioSystem.SoundType.Attack);
         // attack animation
         playerHealth.TakeDamage(1);
         yield return new WaitForSeconds(_meleeAttackDuration);

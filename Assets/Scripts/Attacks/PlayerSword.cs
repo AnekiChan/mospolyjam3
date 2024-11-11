@@ -61,6 +61,7 @@ public class PlayerSword : Weapon
     private IEnumerator Attack()
     {
         _animator.SetTrigger("Attack");
+        CommonEvents.Instance.OnPlayerSoundPlay?.Invoke(AudioSystem.SoundType.Attack);
         _isAttacking = true;
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 attackDirection = (mousePosition - (Vector2)player.position).normalized;

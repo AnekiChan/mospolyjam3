@@ -42,6 +42,7 @@ public class PlayerRangeAttack : MonoBehaviour
     private void LaunchProjectile()
     {
         if (_animator) _animator.SetTrigger("Throw");
+        CommonEvents.Instance.OnPlayerSoundPlay?.Invoke(AudioSystem.SoundType.Shoot);
 
         GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);

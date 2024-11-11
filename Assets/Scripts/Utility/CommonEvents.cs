@@ -28,4 +28,7 @@ public class CommonEvents : MonoBehaviour
     public Action OnBattleStart;
     public Action OnBattleEnd;
     public Action OnGameEnd;
+
+    public Action<AudioSystem.SoundType> OnPlayerSoundPlay;
+    public Action<AudioSystem.SoundType> OnBossSoundPlay;
 }

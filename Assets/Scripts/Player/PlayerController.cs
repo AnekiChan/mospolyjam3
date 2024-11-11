@@ -49,8 +49,8 @@ public class PlayerController : MonoBehaviour
         else _walkParticles.Stop();
 
         _animator.SetFloat("Speed", movement.magnitude);
-        if (movement.x > 0) _spriteRenderer.flipX = false;
-        else if (movement.x < 0) _spriteRenderer.flipX = true;
+        if (movement.x > 0) gameObject.transform.rotation = Quaternion.Euler(0, 0, 0); //_spriteRenderer.flipX = false;
+        else if (movement.x < 0) gameObject.transform.rotation = Quaternion.Euler(0, 180, 0); // _spriteRenderer.flipX = true;
 
         // Уклонение на Shift
         if (Input.GetKeyDown(KeyCode.LeftShift) && Time.time > lastDodgeTime + dodgeCooldown && _isMoving)
@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
         IsDodge = true;
         lastDodgeTime = Time.time;
         _currentSpeed = dodgeSpeed;
+        CommonEvents.Instance.OnPlayerSoundPlay?.Invoke(AudioSystem.SoundType.Dodge);
 
         yield return new WaitForSeconds(dodgeCooldown);
 

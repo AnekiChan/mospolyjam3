@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -31,6 +32,7 @@ public class BossHealth : MonoBehaviour
         {
             currentHealth -= damage;
             CommonEvents.Instance.OnBossChangeHealth.Invoke(currentHealth);
+            CommonEvents.Instance.OnBossSoundPlay?.Invoke(AudioSystem.SoundType.Damage);
 
             _animator.SetTrigger("Hurt");
             _damageParticles.Play();
@@ -59,6 +61,7 @@ public class BossHealth : MonoBehaviour
         GetComponent<BossMovement>().IsDead = true;
         _animator.SetBool("IsDead", true);
         _animator.SetTrigger("Die");
+        CommonEvents.Instance.OnBossSoundPlay?.Invoke(AudioSystem.SoundType.Death);
 
         yield return new WaitForSeconds(2f);
         CommonEvents.Instance.OnBossDeath?.Invoke();
