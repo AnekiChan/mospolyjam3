@@ -12,12 +12,14 @@ public class PlayerSword : Weapon
     [SerializeField] private float attackDuration = 0.2f;
     [SerializeField] private float swordDistanceFromPlayer = 1f;
     [SerializeField] private float checkRadius = 1f;
+    [SerializeField] private bool _rotateSword = false;
 
     [Space]
     [Header("Glitch")]
     [SerializeField] private float _minGlitchDuration = 1f;
     [SerializeField] private float _maxGlitchDuration = 5f;
     [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private Animator _animator;
 
     private bool _isAttacking = false;
     private bool _isGlitching = false;
@@ -37,7 +39,7 @@ public class PlayerSword : Weapon
         {
             StartCoroutine(Attack());
         }
-        RotateSword();
+        if (_rotateSword) RotateSword();
     }
 
     private void RotateSword()
@@ -58,20 +60,21 @@ public class PlayerSword : Weapon
 
     private IEnumerator Attack()
     {
+        _animator.SetTrigger("Attack");
         _isAttacking = true;
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 attackDirection = (mousePosition - (Vector2)player.position).normalized;
 
         float attackAngle = Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg;
-        sword.rotation = Quaternion.Euler(0, 0, attackAngle);
+        if (_rotateSword) sword.rotation = Quaternion.Euler(0, 0, attackAngle);
 
-        Vector3 originalPosition = sword.localPosition;
-        sword.localPosition += sword.right * 0.5f;
+        // Vector3 originalPosition = sword.localPosition;
+        // sword.localPosition += sword.right * 0.5f;
         CheackObject();
 
         yield return new WaitForSeconds(attackDuration);
 
-        sword.localPosition = originalPosition;
+        //sword.localPosition = originalPosition;
         _isAttacking = false;
     }
 
@@ -83,7 +86,8 @@ public class PlayerSword : Weapon
             if (collider.tag == "Boss")
             {
                 collider.GetComponent<BossHealth>()?.TakeDamage(_damage);
-                CommonEvents.Instance.OnPlayerSwordAttack?.Invoke();
+
+                CommonEvents.Instance.OnPlayerSwordAttack.Invoke();
                 return;
             }
         }

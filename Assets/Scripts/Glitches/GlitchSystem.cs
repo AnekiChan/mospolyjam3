@@ -52,7 +52,7 @@ public class GlitchSystem : MonoBehaviour
 
     void OnDisable()
     {
-        CommonEvents.Instance.OnDigitalGlitch -= StartDigitalGlitch;
+        //CommonEvents.Instance.OnDigitalGlitch -= StartDigitalGlitch;
     }
 
     private IEnumerator VisualGlitch()
@@ -60,7 +60,7 @@ public class GlitchSystem : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(_startIntervalVisual);
-            Debug.Log("Visual glitch");
+            //Debug.Log("Visual glitch");
 
             int randomGlitch = Random.Range(0, _visualGlitches.Count);
             _visualGlitches[randomGlitch].StartGlitch();
@@ -85,7 +85,7 @@ public class GlitchSystem : MonoBehaviour
         {
             case 0:
                 {
-                    Debug.Log("Teleport glitch");
+                    //Debug.Log("Teleport glitch");
                     _bossMovement.RandomTeleportGlitch();
                 }
                 break;
@@ -120,16 +120,16 @@ public class GlitchSystem : MonoBehaviour
     {
         switch (_glitchesCount)
         {
-            case 4:
+            case 3:
                 _glitchVariantsCount = 2;
                 break;
-            case 9:
+            case 7:
                 _glitchVariantsCount = 3;
                 break;
-            case 15:
+            case 10:
                 _glitchVariantsCount = 4;
                 break;
-            case 22:
+            case 13:
                 _glitchVariantsCount = 5;
                 break;
         }

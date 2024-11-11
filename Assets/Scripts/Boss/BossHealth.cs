@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class BossHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 20;
 
     private int currentHealth;
+    private Animator _animator;
 
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
@@ -16,17 +19,24 @@ public class BossHealth : MonoBehaviour
         currentHealth = maxHealth;
     }
 
+    void OnEnable()
+    {
+        _animator = GetComponent<Animator>();
+    }
+
     public void TakeDamage(int damage)
     {
         if (currentHealth > 0)
         {
             currentHealth -= damage;
             CommonEvents.Instance.OnBossChangeHealth?.Invoke(currentHealth);
+
+            _animator.SetTrigger("Hurt");
             //Debug.Log("Boss took damage. Current health: " + currentHealth);
 
             if (currentHealth <= 0)
             {
-                Die();
+                StartCoroutine(Die());
             }
         }
     }
@@ -41,9 +51,14 @@ public class BossHealth : MonoBehaviour
         }
     }
 
-    private void Die()
+    private IEnumerator Die()
     {
-        Debug.Log("Boss died.");
+        Debug.Log("BOSS died.");
+        GetComponent<BossMovement>().IsDead = true;
+        _animator.SetBool("IsDead", true);
+        _animator.SetTrigger("Die");
+
+        yield return new WaitForSeconds(2f);
         CommonEvents.Instance.OnBossDeath?.Invoke();
     }
 }

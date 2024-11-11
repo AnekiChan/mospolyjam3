@@ -7,7 +7,7 @@ public class PlayerManaUI : MonoBehaviour
 {
     private Slider _manaSlider;
 
-    void Start()
+    void OnEnable()
     {
         _manaSlider = GetComponent<Slider>();
 

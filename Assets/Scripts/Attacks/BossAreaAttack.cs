@@ -70,6 +70,7 @@ public class BossAreaAttack : BossAttack
         }
 
         _isSpawning = false;
+
     }
 
     private Vector3 GetRandomPositionInArea()

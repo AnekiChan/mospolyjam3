@@ -34,8 +34,8 @@ public class GameMachine : MonoBehaviour
 
     void OnDisable()
     {
-        CommonEvents.Instance.OnBattleStart -= StartBattle;
-        CommonEvents.Instance.OnPlayerDeath -= GameOver;
+        //CommonEvents.Instance.OnBattleStart -= StartBattle;
+        //CommonEvents.Instance.OnPlayerDeath -= GameOver;
     }
 
     public void StartGame()

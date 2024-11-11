@@ -1,12 +1,20 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 5;
 
+    private Animator _animator;
     private int currentHealth;
 
     public int CurrentHealth => currentHealth;
+
+    void OnEnable()
+    {
+        _animator = GetComponent<Animator>();
+    }
 
     private void Start()
     {
@@ -19,11 +27,12 @@ public class PlayerHealth : MonoBehaviour
         {
             currentHealth -= damage;
             CommonEvents.Instance.OnPlayerChangeHealth?.Invoke(currentHealth);
+            _animator.SetTrigger("Hurt");
             //Debug.Log("Player took damage. Current health: " + currentHealth);
 
             if (currentHealth <= 0)
             {
-                Die();
+                StartCoroutine(Die());
             }
         }
     }
@@ -38,9 +47,13 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    private void Die()
+    private IEnumerator Die()
     {
         Debug.Log("Player died.");
+        _animator.SetTrigger("Die");
+        GetComponent<PlayerController>().IsDead = true;
+
+        yield return new WaitForSeconds(2f);
         CommonEvents.Instance.OnPlayerDeath?.Invoke();
     }
 }

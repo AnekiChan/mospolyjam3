@@ -8,6 +8,7 @@ public class ZoneDamage : Weapon
     [SerializeField] private float _timeBeforeAttack;
     [SerializeField] private float _timeAfterAttack;
     [SerializeField] private Vector2 _zoneSize = new Vector2(2, 1);
+    [SerializeField] private Animator _animator;
 
     public override int Damage => _damage;
     void Start()
@@ -18,7 +19,8 @@ public class ZoneDamage : Weapon
     private IEnumerator WaitingForAttack()
     {
         yield return new WaitForSeconds(_timeBeforeAttack);
-        GetComponent<SpriteRenderer>().color = Color.red;
+        //GetComponent<SpriteRenderer>().color = Color.red;
+        _animator.SetTrigger("ZoneAttack");
         CheackObject();
 
         yield return new WaitForSeconds(_timeAfterAttack);

@@ -9,6 +9,7 @@ public class PlayerRangeAttack : MonoBehaviour
     [SerializeField] private float projectileLifetime = 2f; // Время жизни снаряда
 
     [SerializeField] private int _maxMana = 10;
+    [SerializeField] private Animator _animator;
 
     private int _currentMana = 0;
     private Camera cam;
@@ -22,7 +23,7 @@ public class PlayerRangeAttack : MonoBehaviour
 
     void OnDisable()
     {
-        CommonEvents.Instance.OnPlayerSwordAttack -= UpdateMana;
+        //CommonEvents.Instance.OnPlayerSwordAttack -= UpdateMana;
     }
 
     void Update()
@@ -33,13 +34,15 @@ public class PlayerRangeAttack : MonoBehaviour
             {
                 LaunchProjectile();
                 _currentMana = 0;
-                CommonEvents.Instance.OnPlayerManaChanged?.Invoke(_currentMana);
+                CommonEvents.Instance.OnPlayerManaChanged.Invoke(_currentMana);
             }
         }
     }
 
     private void LaunchProjectile()
     {
+        if (_animator) _animator.SetTrigger("Throw");
+
         GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
         Vector2 mousePosition = cam.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = (mousePosition - (Vector2)transform.position).normalized;
@@ -54,8 +57,8 @@ public class PlayerRangeAttack : MonoBehaviour
         if (_currentMana < _maxMana)
         {
             _currentMana++;
-            CommonEvents.Instance.OnPlayerManaChanged?.Invoke(_currentMana);
-            Debug.Log("Current mana: " + _currentMana);
+            CommonEvents.Instance.OnPlayerManaChanged.Invoke(_currentMana);
+            //Debug.Log("Current mana: " + _currentMana);
         }
     }
 }
