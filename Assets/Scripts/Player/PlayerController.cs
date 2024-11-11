@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float dodgeSpeed = 10f;
     [SerializeField] private float dodgeDistance = 3f;
     [SerializeField] private float dodgeCooldown = 1f;
     private Animator _animator;
@@ -16,17 +18,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector2 _teleportArea = new Vector2(10f, 10f);
 
     private Vector2 movement;
+    private float _currentSpeed = 0f;
     private Vector2 lastMovementDirection;
     private Vector2 lastDirection;
     private float lastDodgeTime;
     private bool _isMoving = true;
 
     public bool IsDead { get; set; } = false;
+    public bool IsDodge { get; private set; } = false;
 
     void OnEnable()
     {
         _animator = GetComponent<Animator>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _currentSpeed = moveSpeed;
     }
 
     void Update()
@@ -44,7 +49,7 @@ public class PlayerController : MonoBehaviour
         // Уклонение на Shift
         if (Input.GetKeyDown(KeyCode.LeftShift) && Time.time > lastDodgeTime + dodgeCooldown && _isMoving)
         {
-            Dodge();
+            StartCoroutine(Dodge());
         }
 
         if (_isMoving && !IsDead) MovePlayer();
@@ -52,15 +57,23 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        Vector3 newPosition = transform.position + (Vector3)movement * moveSpeed * Time.deltaTime;
+        Vector3 newPosition = transform.position + (Vector3)movement * _currentSpeed * Time.deltaTime;
         transform.position = newPosition;
     }
 
-    private void Dodge()
+    private IEnumerator Dodge()
     {
+        IsDodge = true;
         lastDodgeTime = Time.time;
-        Vector3 dodgePosition = transform.position + (Vector3)lastMovementDirection * dodgeDistance;
-        transform.position = dodgePosition;
+        _currentSpeed = dodgeSpeed;
+
+        yield return new WaitForSeconds(dodgeCooldown);
+
+        _currentSpeed = moveSpeed;
+        IsDodge = false;
+        //Vector3 dodgePosition = transform.position + (Vector3)lastMovementDirection * dodgeDistance;
+        //transform.position = dodgePosition;
+
     }
 
     public void SwordGlitch()

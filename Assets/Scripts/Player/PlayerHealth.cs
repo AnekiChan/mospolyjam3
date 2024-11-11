@@ -5,9 +5,12 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 5;
+    [SerializeField] private float _damageCooldown = 1f;
+    [SerializeField] private PlayerController _playerController;
 
     private Animator _animator;
     private int currentHealth;
+    private float _damageTimer = 0f;
 
     public int CurrentHealth => currentHealth;
 
@@ -23,10 +26,12 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (currentHealth > 0)
+        if (currentHealth > 0 && !_playerController.IsDodge)
         {
             currentHealth -= damage;
             CommonEvents.Instance.OnPlayerChangeHealth?.Invoke(currentHealth);
+            StartCoroutine(SwitchOffCollider());
+            //_damageTimer = _damageCooldown;
             _animator.SetTrigger("Hurt");
             //Debug.Log("Player took damage. Current health: " + currentHealth);
 
@@ -35,6 +40,14 @@ public class PlayerHealth : MonoBehaviour
                 StartCoroutine(Die());
             }
         }
+    }
+
+    private IEnumerator SwitchOffCollider()
+    {
+        Collider2D collider = GetComponent<Collider2D>();
+        collider.enabled = false;
+        yield return new WaitForSeconds(_damageCooldown);
+        collider.enabled = true;
     }
 
     public void Heal()
@@ -51,7 +64,7 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("Player died.");
         _animator.SetTrigger("Die");
-        GetComponent<PlayerController>().IsDead = true;
+        _playerController.IsDead = true;
 
         yield return new WaitForSeconds(2f);
         CommonEvents.Instance.OnPlayerDeath?.Invoke();
