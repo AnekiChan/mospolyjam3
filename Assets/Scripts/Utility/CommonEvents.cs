@@ -23,6 +23,7 @@ public class CommonEvents : MonoBehaviour
     public Action OnDigitalGlitch;
 
     // общее
+    public Action OnFirstTextEnded;
     public Action OnGameStart;
     public Action OnBattleStart;
     public Action OnBattleEnd;

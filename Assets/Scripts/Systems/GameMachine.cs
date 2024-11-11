@@ -6,8 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class GameMachine : MonoBehaviour
 {
-    [SerializeField] private GameObject StartMenu;
-    [SerializeField] private GameObject GameOverPanel;
+    [SerializeField] private GameObject _startMenu;
+    [SerializeField] private GameObject _gameOverPanel;
+    [SerializeField] private GameObject _startTextPanel;
+    [SerializeField] private GameObject _gameEndPanel;
 
     [Space]
     [SerializeField] private GameObject _glitchSystem;
@@ -20,16 +22,20 @@ public class GameMachine : MonoBehaviour
     [SerializeField] private AnalogGlitch _analogGlitch;
     void Start()
     {
-        StartMenu.SetActive(true);
-        GameOverPanel.SetActive(false);
+        _startTextPanel.SetActive(true);
+        _startMenu.SetActive(false);
+        _gameOverPanel.SetActive(false);
+        _gameEndPanel.SetActive(false);
 
         _glitchSystem.SetActive(false);
         _boss.SetActive(false);
         _bossHealthBar.SetActive(false);
         _player.SetActive(false);
 
+        CommonEvents.Instance.OnFirstTextEnded += ShowStartMenu;
         CommonEvents.Instance.OnBattleStart += StartBattle;
         CommonEvents.Instance.OnPlayerDeath += GameOver;
+        CommonEvents.Instance.OnBossDeath += ShowGameEndPanel;
     }
 
     void OnDisable()
@@ -41,7 +47,7 @@ public class GameMachine : MonoBehaviour
     public void StartGame()
     {
         _player.SetActive(true);
-        StartMenu.SetActive(false);
+        _startMenu.SetActive(false);
         CommonEvents.Instance.OnGameStart?.Invoke();
     }
 
@@ -59,7 +65,7 @@ public class GameMachine : MonoBehaviour
 
     private void GameOver()
     {
-        GameOverPanel.SetActive(true);
+        _gameOverPanel.SetActive(true);
         _boss.SetActive(false);
         _player.SetActive(false);
         _glitchSystem.SetActive(false);
@@ -70,6 +76,21 @@ public class GameMachine : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(0);
+    }
+
+    private void ShowStartMenu()
+    {
+        _startMenu.SetActive(true);
+        _startTextPanel.SetActive(false);
+    }
+
+    private void ShowGameEndPanel()
+    {
+        _gameEndPanel.SetActive(true);
+        _boss.SetActive(false);
+        _player.SetActive(false);
+        _glitchSystem.SetActive(false);
+        _gameEndPanel.GetComponent<FinalCutscene>().StartFinalCutscene();
     }
 
     private IEnumerator GlitchEffect()
