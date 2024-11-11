@@ -8,7 +8,7 @@ public class PlayerHealthUI : MonoBehaviour
 
     private void OnDisable()
     {
-        CommonEvents.Instance.OnPlayerChangeHealth -= UpdateHealthUI;
+        //CommonEvents.Instance.OnPlayerChangeHealth -= UpdateHealthUI;
     }
 
     private void Start()

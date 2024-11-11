@@ -29,7 +29,7 @@ public class BossHealth : MonoBehaviour
         if (currentHealth > 0)
         {
             currentHealth -= damage;
-            CommonEvents.Instance.OnBossChangeHealth?.Invoke(currentHealth);
+            CommonEvents.Instance.OnBossChangeHealth.Invoke(currentHealth);
 
             _animator.SetTrigger("Hurt");
             //Debug.Log("Boss took damage. Current health: " + currentHealth);

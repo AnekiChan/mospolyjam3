@@ -18,7 +18,7 @@ public class BossHealthUI : MonoBehaviour
 
     private void OnDisable()
     {
-        CommonEvents.Instance.OnBossChangeHealth -= UpdateHealthUI;
+        //CommonEvents.Instance.OnBossChangeHealth -= UpdateHealthUI;
     }
 
     private void UpdateHealthUI(int currentHealth)

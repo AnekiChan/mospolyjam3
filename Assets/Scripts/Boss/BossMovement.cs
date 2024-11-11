@@ -17,7 +17,7 @@ public class BossMovement : MonoBehaviour
     [SerializeField] private Vector2 _teleportArea = new Vector2(10f, 10f);
 
     private bool _isAttacking = false;
-    private bool _isMoving = true;
+    private bool _isMoving = false;
     private int _currentAttackIndex = 0;
     private float _attackCooldownTimer = 0f;
     private Animator _animator;
@@ -30,7 +30,7 @@ public class BossMovement : MonoBehaviour
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
-        StartCoroutine(FollowAndAttack());
+        StartCoroutine(StartAttack());
     }
 
     void Update()
@@ -58,8 +58,11 @@ public class BossMovement : MonoBehaviour
         }
     }
 
-    private IEnumerator FollowAndAttack()
+    private IEnumerator StartAttack()
     {
+        yield return new WaitForSeconds(1.2f);
+        _isMoving = true;
+
         while (!IsDead)
         {
             yield return new WaitForSeconds(_attackInterval);
