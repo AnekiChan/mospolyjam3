@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 public class BossHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 20;
+    [SerializeField] private ParticleSystem _damageParticles;
 
     private int currentHealth;
     private Animator _animator;
@@ -32,6 +33,7 @@ public class BossHealth : MonoBehaviour
             CommonEvents.Instance.OnBossChangeHealth.Invoke(currentHealth);
 
             _animator.SetTrigger("Hurt");
+            _damageParticles.Play();
             //Debug.Log("Boss took damage. Current health: " + currentHealth);
 
             if (currentHealth <= 0)

@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerSword _playerSword;
     [SerializeField] private float _movingGlitchDuration = 3f;
     [SerializeField] private Vector2 _teleportArea = new Vector2(10f, 10f);
+    [SerializeField] private ParticleSystem _walkParticles;
 
     private Vector2 movement;
     private float _currentSpeed = 0f;
@@ -41,7 +42,12 @@ public class PlayerController : MonoBehaviour
         movement.Normalize();
 
         if (movement.magnitude > 0)
+        {
             lastMovementDirection = movement;
+            if (!_walkParticles.isPlaying) _walkParticles.Play();
+        }
+        else _walkParticles.Stop();
+
         _animator.SetFloat("Speed", movement.magnitude);
         if (movement.x > 0) _spriteRenderer.flipX = false;
         else if (movement.x < 0) _spriteRenderer.flipX = true;

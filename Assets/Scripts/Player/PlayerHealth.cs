@@ -7,6 +7,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private int maxHealth = 5;
     [SerializeField] private float _damageCooldown = 1f;
     [SerializeField] private PlayerController _playerController;
+    [SerializeField] private ParticleSystem _damageParticles;
 
     private Animator _animator;
     private int currentHealth;
@@ -33,6 +34,7 @@ public class PlayerHealth : MonoBehaviour
             StartCoroutine(SwitchOffCollider());
             //_damageTimer = _damageCooldown;
             _animator.SetTrigger("Hurt");
+            _damageParticles.Play();
             //Debug.Log("Player took damage. Current health: " + currentHealth);
 
             if (currentHealth <= 0)
