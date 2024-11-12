@@ -35,4 +35,5 @@ public class CommonEvents : MonoBehaviour
     public Action OnNoiseStart;
     public Action OnMusicStop;
     public Action OnBreakScreen;
+    public Action OnRandomGlitchSound;
 }

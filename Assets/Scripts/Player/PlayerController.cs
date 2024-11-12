@@ -74,7 +74,10 @@ public class PlayerController : MonoBehaviour
         _currentSpeed = dodgeSpeed;
         CommonEvents.Instance.OnPlayerSoundPlay?.Invoke(AudioSystem.SoundType.Dodge);
 
+        Collider2D collider = GetComponent<Collider2D>();
+        collider.enabled = false;
         yield return new WaitForSeconds(dodgeCooldown);
+        collider.enabled = true;
 
         _currentSpeed = moveSpeed;
         IsDodge = false;
@@ -86,6 +89,7 @@ public class PlayerController : MonoBehaviour
     public void SwordGlitch()
     {
         _playerSword.HideSword();
+        CommonEvents.Instance.OnRandomGlitchSound?.Invoke();
     }
 
     public void MovementGlitch()

@@ -14,34 +14,32 @@ public class BossAreaAttack : BossAttack
     [Space]
     [Header("Glitch")]
     [SerializeField] private float _chanceToGlitch = 0.5f;
-    private float _glitchStartTimer = 0f;
     [SerializeField] private BossMovement _bossMovement;
 
     private int spikesSpawned = 0;
     private bool _isSpawning = false;
-    private float _timer = 0f;
-    private bool _isGlitchWasActive = false;
+    //private float _timer = 0f;
+    //private bool _isGlitchWasActive = false;
 
     public override bool IsMovingWhileAttacking => _isMovingWhileAttacking;
 
     public override void StartAttack()
     {
-        _timer = 0;
+        //_timer = 0;
         spikesSpawned = 0;
         _isSpawning = true;
-        _isGlitchWasActive = false;
+        //_isGlitchWasActive = false;
 
         StartCoroutine(SpawnSpikes());
     }
 
     void Update()
     {
-        if (_isSpawning) _timer += Time.deltaTime;
+        //if (_isSpawning) _timer += Time.deltaTime;
     }
 
     private IEnumerator SpawnSpikes()
     {
-        _glitchStartTimer = spawnInterval * maxSpikes;
         // if (ProbabilityChecker.CheckProbability(0.5f))
         // {
         //     _glitchStartTimer = Random.Range(0.5f, spawnInterval * maxSpikes / 2);
@@ -78,6 +76,8 @@ public class BossAreaAttack : BossAttack
         if (ProbabilityChecker.CheckProbability(_chanceToGlitch))
         {
             CommonEvents.Instance.OnDigitalGlitch.Invoke();
+            if (ProbabilityChecker.CheckProbability(0.3f)) CommonEvents.Instance.OnRandomGlitchSound?.Invoke();
+
             return _bossMovement.PlayerTransform.position;
         }
 

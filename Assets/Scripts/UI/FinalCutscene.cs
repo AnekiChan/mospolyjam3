@@ -45,13 +45,13 @@ public class FinalCutscene : MonoBehaviour
 
         foreach (string phrase in textArray)
         {
+            CommonEvents.Instance.OnNoiseStart?.Invoke();
+            _digitalGlitch.intensity = _digitalGlitchIntensity;
+            _digitalGlitch.enabled = true;
             yield return new WaitForSeconds(1f);
 
             if (textArray[textArray.Length - 1] == phrase)
             {
-                _digitalGlitch.intensity = _digitalGlitchIntensity;
-                _digitalGlitch.enabled = true;
-                CommonEvents.Instance.OnNoiseStart?.Invoke();
 
                 yield return new WaitForSeconds(0.5f);
 
@@ -79,11 +79,11 @@ public class FinalCutscene : MonoBehaviour
         _analogGlitch.enabled = false;
         yield return new WaitForSeconds(0.8f);
         CommonEvents.Instance.OnBreakScreen?.Invoke();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.12f);
         _break.SetActive(true);
         // звук
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         Application.Quit();
     }
 }

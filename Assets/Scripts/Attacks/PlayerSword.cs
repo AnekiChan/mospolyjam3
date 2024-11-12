@@ -20,9 +20,11 @@ public class PlayerSword : Weapon
     [SerializeField] private float _maxGlitchDuration = 5f;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Animator _animator;
+    [SerializeField] private Material _glitchMaterial;
 
     private bool _isAttacking = false;
     private bool _isGlitching = false;
+    private Material _defaultMaterial;
 
     private Camera cam;
 
@@ -31,6 +33,7 @@ public class PlayerSword : Weapon
     void Start()
     {
         cam = Camera.main;
+        _defaultMaterial = _spriteRenderer.material;
     }
 
     void Update()
@@ -108,9 +111,11 @@ public class PlayerSword : Weapon
     private IEnumerator HideSwordCoroutine()
     {
         _isGlitching = true;
-        _spriteRenderer.enabled = false;
+        //_spriteRenderer.enabled = false;
+        _spriteRenderer.material = _glitchMaterial;
         yield return new WaitForSeconds(Random.Range(_minGlitchDuration, _maxGlitchDuration));
-        _spriteRenderer.enabled = true;
+        //_spriteRenderer.enabled = true;
+        _spriteRenderer.material = _defaultMaterial;
         _isGlitching = false;
     }
 }

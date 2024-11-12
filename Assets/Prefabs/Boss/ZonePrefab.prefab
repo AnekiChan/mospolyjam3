@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: 4603109346766788037}
   - component: {fileID: 6475402486228090863}
   - component: {fileID: -7651742243551894371}
+  - component: {fileID: 7790044898901762232}
   m_Layer: 0
   m_Name: ZonePrefab
   m_TagString: Untagged
@@ -208,3 +209,20 @@ MonoBehaviour:
   _timeAfterAttack: 0.7
   _zoneSize: {x: 2.21, y: 0.25}
   _animator: {fileID: 7887804708478730675}
+--- !u!114 &7790044898901762232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4322564534297050931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b6abcc4319efd84389bfb6db0559d2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _glitchMaterial: {fileID: 2100000, guid: b7d66b4369cc09a46b37fe4c5e0d2dba, type: 2}
+  _minDuration: 0.5
+  _maxDuration: 4
+  _minTimer: 0
+  _maxTimer: 5

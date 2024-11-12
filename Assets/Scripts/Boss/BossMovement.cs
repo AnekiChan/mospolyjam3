@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 
 public class BossMovement : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class BossMovement : MonoBehaviour
     private float _attackCooldownTimer = 0f;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
+    private int _attackCounter = 0;
 
     public Transform PlayerTransform => _player;
     public bool IsDead { get; set; } = false;
@@ -85,7 +87,13 @@ public class BossMovement : MonoBehaviour
         _isAttacking = false;
         _animator.SetTrigger("StopAttack");
         _isMoving = true;
-        _currentAttackIndex = (_currentAttackIndex + 1) % _attacks.Count;
+
+        if (_attackCounter < 3)
+        {
+            _currentAttackIndex = (_currentAttackIndex + 1) % _attacks.Count;
+            _attackCounter++;
+        }
+        else _currentAttackIndex = Random.Range(0, _attacks.Count);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

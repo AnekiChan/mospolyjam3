@@ -16,6 +16,10 @@ public class AudioSystem : MonoBehaviour
     [SerializeField] private AudioClip _breakSound;
 
     [Space]
+    [SerializeField] private AudioSource _glitchesAudioSource;
+    [SerializeField] private List<AudioClip> _glitchesSounds = new List<AudioClip>();
+
+    [Space]
     [SerializeField] private AudioSource _playerSoundSource;
     [SerializeField] private AudioClip _damageSound;
     [SerializeField] private AudioClip _deathSound;
@@ -37,11 +41,12 @@ public class AudioSystem : MonoBehaviour
         CommonEvents.Instance.OnPlayerSoundPlay += PlayPlayerSound;
         CommonEvents.Instance.OnBossSoundPlay += PlayBossSound;
         CommonEvents.Instance.OnPlayerDeath += SetMenuMusic;
-        CommonEvents.Instance.OnBossDeath += SetMenuMusic;
+        CommonEvents.Instance.OnBossDeath += StopMusic;
 
         CommonEvents.Instance.OnNoiseStart += SetNoise;
         CommonEvents.Instance.OnMusicStop += StopMusic;
         CommonEvents.Instance.OnBreakScreen += BreakSound;
+        CommonEvents.Instance.OnRandomGlitchSound += RandomGlitchSound;
     }
 
     void OnDisable()
@@ -84,6 +89,12 @@ public class AudioSystem : MonoBehaviour
         _uiAudioSource.Play();
     }
 
+    private void RandomGlitchSound()
+    {
+        _glitchesAudioSource.clip = _glitchesSounds[Random.Range(0, _glitchesSounds.Count)];
+        _glitchesAudioSource?.Play();
+    }
+
     public void PlayButtonSound()
     {
         _uiAudioSource.clip = _clickButtonSound;
@@ -92,6 +103,7 @@ public class AudioSystem : MonoBehaviour
 
     private void PlayPlayerSound(SoundType type)
     {
+        _playerSoundSource.clip = null;
         switch (type)
         {
             case SoundType.Damage:
@@ -105,9 +117,6 @@ public class AudioSystem : MonoBehaviour
                 break;
             case SoundType.Shoot:
                 _playerSoundSource.clip = _shootSound;
-                break;
-            case SoundType.Dodge:
-                _playerSoundSource.clip = _dodgeSound;
                 break;
             default:
                 break;

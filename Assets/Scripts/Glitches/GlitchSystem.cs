@@ -36,11 +36,6 @@ public class GlitchSystem : MonoBehaviour
     private static float _chanceToGlitch = 0.3f;
     public static float ChanceToGlitch => _chanceToGlitch;
 
-    void Awake()
-    {
-
-    }
-
     void OnEnable()
     {
         _currentInterval = _startInterval;
@@ -64,6 +59,7 @@ public class GlitchSystem : MonoBehaviour
 
             int randomGlitch = Random.Range(0, _visualGlitches.Count);
             _visualGlitches[randomGlitch].StartGlitch();
+            CommonEvents.Instance.OnRandomGlitchSound?.Invoke();
         }
     }
 
@@ -91,26 +87,26 @@ public class GlitchSystem : MonoBehaviour
                 break;
             case 1:
                 {
-                    Debug.Log("Sword glitch");
+                    //Debug.Log("Sword glitch");
                     _playerController.SwordGlitch();
                 }
                 break;
             case 2:
                 {
-                    Debug.Log("Movement glitch");
-                    _playerController.MovementGlitch();
+                    //Debug.Log("Player teleport glitch");
+                    _playerController.RandomTeleportGlitch();
                 }
                 break;
             case 3:
                 {
-                    Debug.Log("Player teleport glitch");
-                    _playerController.RandomTeleportGlitch();
+                    //Debug.Log("Movement glitch");
+                    _playerController.MovementGlitch();
                 }
                 break;
             case 4:
                 {
                     Debug.Log("Boss heal glitch");
-                    _bossHealth.Heal(Random.Range(5, 50));
+                    _bossHealth.Heal(Random.Range(5, 20));
                 }
                 break;
         }
@@ -120,16 +116,16 @@ public class GlitchSystem : MonoBehaviour
     {
         switch (_glitchesCount)
         {
-            case 3:
+            case 2:
                 _glitchVariantsCount = 2;
                 break;
-            case 7:
+            case 4:
                 _glitchVariantsCount = 3;
                 break;
-            case 10:
+            case 6:
                 _glitchVariantsCount = 4;
                 break;
-            case 13:
+            case 10:
                 _glitchVariantsCount = 5;
                 break;
         }

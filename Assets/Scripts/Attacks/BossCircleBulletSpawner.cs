@@ -46,6 +46,7 @@ public class BossCircleBulletSpawner : BossAttack
         if (ProbabilityChecker.CheckProbability(0.5f))
         {
             _glitchStartTimer = Random.Range(0.5f, _maxTimer / 2);
+            if (ProbabilityChecker.CheckProbability(0.5f)) CommonEvents.Instance.OnRandomGlitchSound?.Invoke();
             Debug.Log("Bullet Spawner Glitching");
         }
 

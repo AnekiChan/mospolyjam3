@@ -6,10 +6,10 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private float smoothSpeed = 0.125f; // Скорость сглаживания
     [SerializeField] private Vector3 offset; // Смещение камеры относительно игрока
 
-    private void LateUpdate()
+    private void Update()
     {
         Vector3 targetPosition = player.position + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, targetPosition, smoothSpeed);
+        Vector3 smoothedPosition = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
         transform.position = smoothedPosition;
     }
 }

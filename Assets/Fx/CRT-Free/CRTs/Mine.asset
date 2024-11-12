@@ -23,7 +23,7 @@ MonoBehaviour:
     dithering8: 0
     vignette: 0
     innerCurve: 20
-    monitorCurve: 0.008
+    monitorCurve: 0.005
     monitorInnerSize:
       width: 0
       height: 0
@@ -42,4 +42,4 @@ MonoBehaviour:
       sizeMultiplier: 0.89
     innerMonitorShineRadius: -0.087
     innerMonitorShineCurve: 10
-  validationId: b8b2f7a3-a407-43fb-bd7c-93fd976eb710
+  validationId: 6e615104-ebe7-4628-a9f1-a921e6db05f3

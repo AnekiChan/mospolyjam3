@@ -25,7 +25,7 @@ public class VisualCameraRotateGlitch : VisualGlitch
 
     private IEnumerator TiltCoroutine()
     {
-        _camera.transform.rotation = Quaternion.Euler(0, 0, _tiltAngle);
+        _camera.transform.rotation = Quaternion.Euler(0, 0, Random.Range(-_tiltAngle, _tiltAngle));
         yield return new WaitForSeconds(_tiltDuration);
         _camera.transform.rotation = _originalRotation;
     }
